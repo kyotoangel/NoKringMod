@@ -6,7 +6,7 @@ y[n] : « carrier signal » (/ sidechain signal)
 
 x[n] : main signal
 
-carrier[n] = max(1 - depth*abs(y[n]), 0) (depth being controlled by the big knob, value from 0 to 1)
+carrier[n] = max(1 - depth*abs(y[n]), 0) (depth being controlled by the big knob, float value from 0 to 1)
 
 output[n] = x[n] * carrier[n]
 
