@@ -14,6 +14,8 @@
 NoKringModAudioProcessorEditor::NoKringModAudioProcessorEditor (NoKringModAudioProcessor& p)
     : AudioProcessorEditor (&p), audioProcessor (p)
 {
+    // chargement de l'image de logo
+    logoImage = juce::ImageCache::getFromMemory(BinaryData::logo_png, BinaryData::logo_pngSize);
     // config slider
     DepthSlider.setSliderStyle(juce::Slider::RotaryHorizontalVerticalDrag);
     DepthSlider.setTextBoxStyle(juce::Slider::TextBoxBelow, true, 50, 20);
@@ -24,7 +26,7 @@ NoKringModAudioProcessorEditor::NoKringModAudioProcessorEditor (NoKringModAudioP
                                                                                              );
     // --------------------------
     addAndMakeVisible(audioProcessor.mainWaveViewer);
-    audioProcessor.mainWaveViewer.setColours(bg_color, juce::Colours::white);
+    audioProcessor.mainWaveViewer.setColours(bg_color, juce::Colours::black);
     setSize (400, 200);
 }
 
@@ -37,6 +39,22 @@ void NoKringModAudioProcessorEditor::paint (juce::Graphics& g)
 {
     // (Our component is opaque, so we must completely fill the background with a solid colour)
     g.fillAll (bg_color);
+    
+    if (logoImage.isValid())
+        {
+            // On définit la taille que l'image doit avoir à l'écran
+            int imgW = 125;
+            int imgH = 75;
+            int margin = 10; // Espace par rapport au bord
+
+            // Calcul de la position : x = marge, y = hauteur totale - hauteur image - marge
+            int xPos = margin;
+            int yPos = getHeight() - imgH - margin;
+
+            g.drawImageWithin (logoImage,
+                               xPos, yPos, imgW, imgH,
+                               juce::RectanglePlacement::onlyReduceInSize | juce::RectanglePlacement::centred);
+        }
 }
 
 void NoKringModAudioProcessorEditor::resized()

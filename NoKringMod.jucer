@@ -5,6 +5,14 @@
               companyName="Nokami" companyWebsite="https://guns.lol/nokami"
               pluginFormats="buildAU,buildVST,buildVST3">
   <MAINGROUP id="UapEA1" name="NoKringMod">
+    <GROUP id="{06B2BD7E-8C33-31AC-60AE-D31DBC15A4E1}" name="Assets">
+      <FILE id="FUNfsX" name="logo.png" compile="0" resource="1" file="Assets/logo.png"
+            xcodeResource="1"/>
+      <FILE id="IfgfbF" name="knob.svg" compile="0" resource="1" file="Assets/knob.svg"
+            xcodeResource="1"/>
+      <FILE id="S9Gyyg" name="knob_bg.svg" compile="0" resource="1" file="Assets/knob_bg.svg"
+            xcodeResource="1"/>
+    </GROUP>
     <GROUP id="{9371E7ED-1028-DACE-D1F8-66E81C91B355}" name="Source">
       <FILE id="pvkeHV" name="PluginProcessor.cpp" compile="1" resource="0"
             file="Source/PluginProcessor.cpp"/>

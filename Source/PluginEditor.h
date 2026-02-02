@@ -10,7 +10,7 @@
 
 #include <JuceHeader.h>
 #include "PluginProcessor.h"
-
+	
 //==============================================================================
 /**
 */
@@ -31,6 +31,7 @@ private:
     juce::Slider DepthSlider;
     std::unique_ptr<juce::AudioProcessorValueTreeState::SliderAttachment> depthAttachment;
     juce::Colour bg_color = juce::Colours::pink;
+    juce::Image logoImage;
 
     JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR (NoKringModAudioProcessorEditor)
 };
