@@ -1,3 +1,6 @@
+# VST Overview
+<img width="403" height="222" alt="Capture d’écran 2026-02-02 à 19 21 12" src="https://github.com/user-attachments/assets/dec713f3-97e2-4529-8c0f-deabc8f51b96" />
+
 # DSP
 y[n] : « carrier signal » (/ sidechain signal)
 
