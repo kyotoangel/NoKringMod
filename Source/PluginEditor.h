@@ -28,6 +28,9 @@ private:
     // This reference is provided as a quick way for your editor to
     // access the processor object that created it.
     NoKringModAudioProcessor& audioProcessor;
+    juce::Slider DepthSlider;
+    std::unique_ptr<juce::AudioProcessorValueTreeState::SliderAttachment> depthAttachment;
+    juce::Colour bg_color = juce::Colours::pink;
 
     JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR (NoKringModAudioProcessorEditor)
 };

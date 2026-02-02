@@ -48,14 +48,16 @@ public:
     void setCurrentProgram (int index) override;
     const juce::String getProgramName (int index) override;
     void changeProgramName (int index, const juce::String& newName) override;
-
     //==============================================================================
     void getStateInformation (juce::MemoryBlock& destData) override;
     void setStateInformation (const void* data, int sizeInBytes) override;
+    //==============================================================================
+    juce::AudioProcessorValueTreeState treeState;
+    juce::AudioVisualiserComponent mainWaveViewer;
 
 private:
     //==============================================================================
     JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR (NoKringModAudioProcessor)
+    juce::AudioProcessorValueTreeState::ParameterLayout createParameterLayout();
     double currentSampleRate = 44100.0;
-    float depth = 1.0f;
 };

@@ -12,14 +12,28 @@
 #include <juce_core/juce_core.h>
 
 //==============================================================================
+juce::AudioProcessorValueTreeState::ParameterLayout NoKringModAudioProcessor::createParameterLayout()
+{
+    juce::AudioProcessorValueTreeState::ParameterLayout layout;
+    layout.add(std::make_unique<juce::AudioParameterFloat>(
+        juce::ParameterID { "depth", 1 }, // ID unique pour le VST3
+        "Depth",                          // Nom affiché
+        0.0f, 1.0f, 0.5f));               // Min, Max, Défaut
+    return layout;
+}
+
 NoKringModAudioProcessor::NoKringModAudioProcessor()
 #ifndef JucePlugin_PreferredChannelConfigurations
      : AudioProcessor (BusesProperties()
                        .withInput  ("Input",  juce::AudioChannelSet::stereo())
                        .withOutput ("Output", juce::AudioChannelSet::stereo())
-                       .withInput("Sidechain", juce::AudioChannelSet::stereo()))
+                       .withInput("Sidechain", juce::AudioChannelSet::stereo())),
+        treeState (*this, nullptr, "PARAMETERS", createParameterLayout()),
+                   mainWaveViewer(1) // Initialisation ici
 #endif
 {
+    mainWaveViewer.setRepaintRate(30);
+    mainWaveViewer.setBufferSize(512);
 }
 
 NoKringModAudioProcessor::~NoKringModAudioProcessor()
@@ -146,6 +160,9 @@ void NoKringModAudioProcessor::processBlock (juce::AudioBuffer<float>& buffer, j
     auto sidechainBus = getBusBuffer(buffer, true, 1); // bus signal carrier (sidechain)
     auto* sidechainL = sidechainBus.getWritePointer(0);
     auto* sidechainR = sidechainBus.getWritePointer(1);
+    
+    // --- Automations
+    float currentDepth = treeState.getRawParameterValue("depth")->load();
 
     // avoid feedback loops
     for (auto i = totalNumInputChannels; i < totalNumOutputChannels; ++i)
@@ -158,12 +175,14 @@ void NoKringModAudioProcessor::processBlock (juce::AudioBuffer<float>& buffer, j
         float sidechainSampleR = sidechainR[sample];
         
         // rectification des signaux sample par sample pour pouvoir multiplier l'entrée par la carrier rectifiée instantanément
-        float rectifiedL = std::fmaxf(1.0f - std::fabs(sidechainSampleL), 0);
-        float rectifiedR = std::fmaxf(1.0f - std::fabs(sidechainSampleR), 0);
+        float rectifiedL = std::fmaxf(1.0f - std::fabs(sidechainSampleL * currentDepth), 0);
+        float rectifiedR = std::fmaxf(1.0f - std::fabs(sidechainSampleR * currentDepth), 0);
         
         // output : multiplication du main par le carrier rectifié
         mainL[sample] *= rectifiedL;
         mainR[sample] *= rectifiedR;
+        
+        mainWaveViewer.pushBuffer(mainBus);
     }
 }
 
